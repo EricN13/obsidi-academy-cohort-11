@@ -6,7 +6,7 @@ public class Variables {
         
         boolean isJavaFun = true;
         char grade = 'A';
-        String message = " I love Java";
+        String message = " I love learning Java";
         byte number = 100;
         short shortNumber = 10000;
         int age = 30;
