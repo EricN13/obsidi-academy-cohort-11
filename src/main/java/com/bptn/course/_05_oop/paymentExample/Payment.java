@@ -1,4 +1,4 @@
-package com.bptn.course_05_oop.paymentExample;
+package com.bptn.course._05_oop.paymentExample;
 
 public class Payment {
 

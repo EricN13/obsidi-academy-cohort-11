@@ -1,4 +1,4 @@
-package com.bptn.course_05_oop.cafeCalculatorCustomMethod;
+package com.bptn.course._05_oop.cafeCalculatorCustomMethod;
 
 public class CafeOrder {
     double pricePerItem;

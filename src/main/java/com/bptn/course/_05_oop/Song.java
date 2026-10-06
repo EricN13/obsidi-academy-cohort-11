@@ -1,4 +1,4 @@
-package com.bptn.course_05_oop;
+package com.bptn.course._05_oop;
 
 public class Song {
 
