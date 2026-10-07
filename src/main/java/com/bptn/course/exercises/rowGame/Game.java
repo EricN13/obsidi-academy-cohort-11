@@ -66,7 +66,7 @@ public class Game {
             }
 
             Player currentPlayer = players[currentPlayerIndex];
-            // Override default ToString for Player class
+            // Override default tostring for Player class
             System.out.println("It is player " + currentPlayer.getPlayerNumber() + "'s turn. " + currentPlayer);
             playerTurn(currentPlayer);
             if (board.checkIfPlayerIsTheWinner(currentPlayer.getPlayerNumber())) {

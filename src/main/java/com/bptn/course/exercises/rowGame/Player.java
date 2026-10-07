@@ -5,7 +5,6 @@ package com.bptn.course.exercises.rowGame;
  */
 
 import java.util.Scanner;
-
 public class Player {
 
     private String name;
