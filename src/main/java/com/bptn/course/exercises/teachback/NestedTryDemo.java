@@ -1,12 +1,12 @@
 package com.bptn.course.exercises.teachback;
 
-public class NestedtryDemo {
+public class NestedTryDemo {
     public static void main(String[] args) {
         try {
             System.out.println("Starting process");
 
             try {
-                int result = 10 / 0;
+                int result = 10/0;
             } catch (ArithmeticException e) {
                 System.out.println("Division error");
             }
@@ -15,6 +15,9 @@ public class NestedtryDemo {
 
         } catch (Exception e) {
             System.out.println("Unexpected error");
+        }
+        finally{
+            System.out.println("Done. bye!");
         }
     }
 }
