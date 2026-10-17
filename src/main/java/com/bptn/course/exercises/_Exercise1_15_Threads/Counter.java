@@ -17,11 +17,10 @@ public class Counter {
         // we start both treads
         thread1.start();
         thread2.start();
-        //wait for both to finish before we dsplay the final counter value
+        //wait for both to finish before we display the final counter value
 
         thread1.join();
         thread2.join();
 
-        System.out.println(counter.value());
-    }
-}
+        //System.out.println(counter.);
+}}
