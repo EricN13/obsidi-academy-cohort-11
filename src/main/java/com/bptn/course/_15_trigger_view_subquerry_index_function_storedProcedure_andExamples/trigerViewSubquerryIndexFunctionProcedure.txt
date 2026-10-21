@@ -1,0 +1,255 @@
+exerices
+--------------
+creating a table employees
+
+CREATE TABLE Employees (
+    emp_id INT PRIMARY KEY,
+    name VARCHAR(50),
+    department VARCHAR(50),
+    salary DECIMAL(10,2)
+);
+
+
+inserting sample data in table
+---------------------------
+INSERT INTO Employees (emp_id, name, department, salary)
+VALUES
+(1, 'Alice', 'IT', 60000),
+(2, 'Bob', 'HR', 45000),
+(3, 'Charlie', 'IT', 70000),
+(4, 'David', 'Sales', 50000);
+
+
+check if data are inserted 
+-----------------------
+SELECT * FROM Employees;
+
+
+
+                                                     Trigger-view-subquerry
+                                                     ---------------------
+
+                1. Triggers
+               -----------
+
+A trigger is a database program that automatically executes when a specific event occurs, such as an INSERT, UPDATE, or DELETE.
+
+Example: Create a trigger to log salary changes
+
+CREATE TABLE Salary_Log (
+    emp_id INT,
+    old_salary DECIMAL(10,2),
+    new_salary DECIMAL(10,2)
+);
+
+Create a trigger (MySQL syntax):
+---------------------------
+
+In PostgreSQL, you must first create a trigger function, then create a trigger that executes that function.
+
+-- Step 1: Create function
+CREATE OR REPLACE FUNCTION log_salary_update()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO Salary_Log
+    VALUES (OLD.emp_id, OLD.salary, NEW.salary);
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Step 2: Create trigger
+CREATE TRIGGER salary_update_trigger
+AFTER UPDATE ON Employees
+FOR EACH ROW
+EXECUTE FUNCTION log_salary_update();
+
+Now update an employee's salary and The trigger automatically inserts a record into Salary_Log.
+--------------------------------------------------------------------------------------
+UPDATE Employees
+SET salary = 65000
+WHERE emp_id = 1;
+  
+
+Important terms:
+----------------------
+
+BEFORE: Executes before the event.
+
+AFTER: Executes after the event.
+
+OLD: Refers to the previous row values.
+
+NEW: Refers to the new row values.
+
+FOR EACH ROW: Executes for each affected row.
+
+
+            2. Views
+              ---------------
+
+A view is a virtual table created from the result of a SQL query. It usually stores the query definition rather than a separate copy of the data.
+
+Why use views?
+Simplify complicated queries.
+
+Hide sensitive columns.
+
+Present selected data to users.
+
+Reuse frequently needed queries.
+
+Example: Create a view of IT employees
+
+sql
+CREATE VIEW IT_Employees AS
+SELECT emp_id, name, salary
+FROM Employees
+WHERE department = 'IT';
+
+checking it: SELECT * FROM IT_Employees;
+
+To modify or remove a view:
+---------------------------
+
+
+sql
+CREATE OR REPLACE VIEW IT_Employees AS
+SELECT emp_id, name, salary
+FROM Employees
+WHERE department = 'IT';
+
+sql
+DROP VIEW IT_Employees;
+
+                 3. Subqueries
+               ----------------
+A subquery is a query written inside another SQL query. It is also called an inner query or nested query.
+
+example: 
+
+SELECT name, salary
+FROM Employees
+WHERE salary > (
+    SELECT AVG(salary)
+    FROM Employees
+);
+
+                             4. Indexes
+                          -----------------
+An index is a database structure that helps the database find rows more quickly, similar to the index at the back of a book.
+Without a suitable index, the database may need to scan many or all rows in a table. With an index, it can often locate matching rows more efficiently.
+Example: Create an index on employee names
+
+example :
+
+CREATE INDEX idx_employee_name
+ON Employees(name);
+
+SELECT *
+FROM Employees
+WHERE name = 'Alice';
+
+The database can use the index to locate Alice's row efficiently, depending on the query plan and table size.
+
+Types of indexes
+--------------
+Single-column index: Indexes one column.
+
+Composite index: Indexes multiple columns.
+
+Unique index: Prevents duplicate indexed values.
+
+Clustered index: Determines or influences how table rows are organized, depending on the database system.
+
+Nonclustered index: Stores an index structure separate from the table's row organization.
+
+Example: Composite index
+
+sql
+CREATE INDEX idx_dept_salary
+ON Employees(department, salary);
+This index can help queries such as:
+
+
+sql
+SELECT *
+FROM Employees
+WHERE department = 'IT'
+  AND salary > 60000;
+
+For a composite index on (department, salary), the order matters. It is generally most useful for searches that begin with department, though the optimizer and database system determine the actual plan.
+
+                                             5.SQL Functions
+                                             -----------------
+A function is a reusable block of code that returns a value.
+
+There are two main categories:
+
+Built-in functions: Already provided by SQL, such as SUM(), AVG(), COUNT() and UPPER().
+
+User-defined functions (UDFs): Functions you create for your own calculations.
+
+Example 1: Built-in function- just a normal query
+-----------------------------
+Calculate the average salary:
+
+SELECT AVG(salary) AS average_salary
+FROM Employees;
+
+Example 2: Create your own function
+-----------------------------
+Suppose you want a function that calculates an employee's annual bonus as 10% of their salary.
+
+ex:
+
+DELIMITER //
+
+CREATE FUNCTION CalculateBonus(salary DECIMAL(10,2))
+RETURNS DECIMAL(10,2)
+DETERMINISTIC
+BEGIN
+    RETURN salary * 0.10;
+END //
+
+DELIMITER ;
+
+
+Call the function:
+--------------------
+SELECT CalculateBonus(60000) AS bonus;
+
+
+You can also use it with your table:
+------------------------------
+
+SELECT name, salary, CalculateBonus(salary) AS bonus
+FROM Employees;
+
+This calculates the bonus for every employee.
+Key point: A function returns a value, which you can use in a query or expression.
+
+                                       6. Stored Procedures
+                                      -------------------------
+A stored procedure is a saved block of SQL statements that you execute when needed. It can perform operations such as retrieving data, inserting records, updating salaries, or deleting rows.
+
+Example 1: Create a stored procedure to display all employees
+
+
+DELIMITER //
+
+CREATE PROCEDURE GetEmployees()
+BEGIN
+    SELECT * FROM Employees;
+END //
+
+DELIMITER ;
+Execute the procedure:
+----------------------------
+
+CALL GetEmployees();
+Result: All four employees are displayed.
+
+
+
+

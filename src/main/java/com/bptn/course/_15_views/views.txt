@@ -1,0 +1,14 @@
+Views
+
+The Normalization process helps computers handle data quickly, but it sometimes makes it harder for humans to understand, and even harder to find what they need without running complex SQL commands like JOINs.
+VIEWs are a way to get what we need from PSQL in exactly the format we need it while only having to run a simple statement, rather than the entirety of our difficult JOIN query.
+
+
+Example:
+-- Creating a view for students that have a phone number
+CREATE VIEW "students_view" AS
+SELECT "studentId", "courseId", "studentName", "studentEmail", "studentPhone" 
+FROM "students" WHERE "studentPhone" IS NOT NULL;
+
+-- Call the view created
+SELECT * FROM "students_view";
