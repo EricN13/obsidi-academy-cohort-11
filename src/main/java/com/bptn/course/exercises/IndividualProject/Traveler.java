@@ -15,6 +15,18 @@ public abstract class Traveler {
         this.nationality = nationality;
     }
 
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
     public String getFullName() {
 
         return fullName;

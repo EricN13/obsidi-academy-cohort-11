@@ -1,4 +1,4 @@
-exerices
+exercises
 --------------
 creating a table employees
 
@@ -26,7 +26,7 @@ SELECT * FROM Employees;
 
 
 
-                                                     Trigger-view-subquerry
+                                                     Trigger-view-subquery
                                                      ---------------------
 
                 1. Triggers

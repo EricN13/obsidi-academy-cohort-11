@@ -23,6 +23,26 @@ public class Trip {
         this.checkedBaggage = checkedBaggage;
     }
 
+    public void setTraveler(Traveler traveler) {
+        this.traveler = traveler;
+    }
+
+    public void setDepartureAirport(String departureAirport) {
+        this.departureAirport = departureAirport;
+    }
+
+    public void setDestinationAirport(String destinationAirport) {
+        this.destinationAirport = destinationAirport;
+    }
+
+    public void setFlightTime(LocalDateTime flightTime) {
+        this.flightTime = flightTime;
+    }
+
+    public void setCheckedBaggage(boolean checkedBaggage) {
+        this.checkedBaggage = checkedBaggage;
+    }
+
     public Traveler getTraveler() {
 
         return traveler;
