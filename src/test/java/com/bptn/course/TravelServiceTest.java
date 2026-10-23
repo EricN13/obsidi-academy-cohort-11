@@ -1,6 +1,10 @@
 package com.bptn.course;
-import com.bptn.course.exercises.IndividualProject.*;
+
+import com.bptn.course.exercises.IndividualProject.TravelService;
+import com.bptn.course.exercises.IndividualProject.Trip;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -8,52 +12,77 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TravelServiceTest {
 
-    @Test
-    void testInternationalTravelerDocuments() {
+    private TravelService service;
+    private LocalDateTime flightTime;
 
-        Traveler traveler = new InternationalTraveler(
-                "Eric", 30, "Canadian", "AB123456"
-        );
-
-        List<String> documents =
-                traveler.getRequiredDocuments();
-
-        assertTrue(documents.contains("Passport"));
+    @BeforeEach
+    void setUp() {
+        service = new TravelService();
+        flightTime = LocalDateTime.now().plusDays(10);
     }
 
+    // FEATURE 1: MY TRIP
     @Test
-    void testDomesticTravelerDocuments() {
+    void testCreateTrip() {
 
-        Traveler traveler = new DomesticTraveler(
-                "Eric", 30, "Canadian"
+        Trip trip = service.addTrip(
+                "Eric",
+                "Manzi",
+                30,
+                "Canadian",
+                "eric@example.com",
+                1,
+                "",
+                "YUL",
+                "YYZ",
+                flightTime,
+                false
         );
 
-        assertFalse(
-                traveler.getRequiredDocuments()
-                        .contains("Passport")
-        );
+        assertNotNull(trip);
+        assertEquals("Eric", trip.getTraveler().getFirstName());
+        assertEquals("Manzi", trip.getTraveler().getLastName());
+        assertEquals("YUL", trip.getDepartureAirport());
     }
 
+    // FEATURE 2: RECOMMENDED ARRIVAL TIME
     @Test
-    void testInternationalArrivalTime() {
+    void testRecommendedArrivalTime() {
 
-        Traveler traveler = new InternationalTraveler(
-                "Eric", 30, "Canadian", "AB123456"
+        Trip trip = service.addTrip(
+                "Eric", "Manzi", 30,
+                "Canadian", "eric@example.com",
+                2, "PA123456",
+                "YUL", "JFK",
+                flightTime, true
         );
 
-        Trip trip = new Trip(
-                traveler,
-                "Montreal",
-                "Tampa",
-                LocalDateTime.of(2027, 5, 10, 20, 0),
-                true
+        LocalDateTime arrival =
+                service.calculateArrival(trip.getTripId());
+
+        assertEquals(flightTime.minusHours(3), arrival);
+    }
+
+    // FEATURE 3: TRAVEL CHECKLIST & SUMMARY
+    @Test
+    void testTravelChecklistAndSummary() {
+
+        Trip trip = service.addTrip(
+                "Eric", "Manzi", 30,
+                "Canadian", "eric@example.com",
+                2, "PA123456",
+                "YUL", "JFK",
+                flightTime, true
         );
 
-        TravelService service = new TravelService();
+        Trip savedTrip = service.findTrip(trip.getTripId());
 
-        assertEquals(
-                LocalDateTime.of(2027, 5, 10, 17, 0),
-                service.calculateArrival(trip)
-        );
+        List<String> checklist =
+                service.makeChecklist(trip.getTripId());
+
+        assertEquals("Eric", savedTrip.getTraveler().getFirstName());
+        assertEquals("JFK", savedTrip.getDestinationAirport());
+        assertTrue(checklist.contains("Passport"));
+        assertTrue(checklist.contains("Checked baggage"));
     }
 }
